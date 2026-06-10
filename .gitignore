@@ -1,0 +1,13 @@
+# Ambiente / sistema
+.venv/
+.claude/
+.DS_Store
+
+# Arquivos-fonte pesados (não vão para a web — já convertidos)
+*.HEIC
+*.heic
+0610*.mp4
+videos/_*.mp4
+
+# Documentos internos
+*.pdf
