@@ -160,6 +160,23 @@
       </div>
     </section>
 
+    <!-- ===================== FACHADA (destaque com névoa) ===================== -->
+    <section class="facade on-dark" id="fachada">
+      <div class="facade-bg" role="img" aria-label="Fachada iluminada de uma unidade Pure Pilates"></div>
+      <div class="facade-fog"></div>
+      <div class="container facade-inner">
+        <div class="facade-text">
+          <span class="eyebrow">A fachada da sua unidade</span>
+          <h2>Fachada que valoriza o seu imóvel.</h2>
+          <p class="lead">Comunicação visual padronizada, moderna e iluminada. A presença da Pure Pilates eleva a percepção de valor e a atratividade comercial do imóvel — por dentro e por fora.</p>
+          <a class="btn btn-primary" href="#proposta">
+            Receber proposta
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
     <!-- ===================== O PÚBLICO ===================== -->
     <section class="section section-mist" id="publico">
       <div class="container">
@@ -181,6 +198,34 @@
               <li>Complementa e fortalece o mix de operações</li>
             </ul>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== CARROSSEL / GALERIA ===================== -->
+    <section class="section section-mist" id="galeria">
+      <div class="container">
+        <div class="section-head center">
+          <span class="eyebrow">Conheça o estúdio</span>
+          <h2>Por dentro e por fora, um padrão que valoriza.</h2>
+        </div>
+        <div class="carousel" id="carousel">
+          <button class="carousel-btn prev" type="button" aria-label="Imagem anterior">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="carousel-track">
+            <figure class="carousel-slide"><img src="images/galeria-1.jpg" alt="Estúdio Pure Pilates com fileira de aparelhos Reformer" loading="lazy" /></figure>
+            <figure class="carousel-slide"><img src="images/galeria-2.jpg" alt="Estúdio Pure Pilates com grandes janelas e aparelhos" loading="lazy" /></figure>
+            <figure class="carousel-slide"><img src="images/galeria-3.jpg" alt="Alunos praticando em um estúdio Pure Pilates" loading="lazy" /></figure>
+            <figure class="carousel-slide"><img src="images/galeria-4.jpg" alt="Estúdio Pure Pilates amplo com diversos aparelhos" loading="lazy" /></figure>
+            <figure class="carousel-slide"><img src="images/galeria-5.jpg" alt="Recepção de uma unidade Pure Pilates" loading="lazy" /></figure>
+            <figure class="carousel-slide"><img src="images/galeria-6.jpg" alt="Pátio e entrada de uma unidade Pure Pilates" loading="lazy" /></figure>
+            <figure class="carousel-slide"><img src="images/galeria-7.jpg" alt="Fachada do prédio de uma unidade Pure Pilates" loading="lazy" /></figure>
+          </div>
+          <button class="carousel-btn next" type="button" aria-label="Próxima imagem">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="carousel-dots" id="carousel-dots"></div>
         </div>
       </div>
     </section>
@@ -311,5 +356,50 @@
       </div>
     </div>
   </footer>
+  <script>
+    (function () {
+      var root = document.getElementById('carousel');
+      if (!root) return;
+      var track = root.querySelector('.carousel-track');
+      var slides = Array.prototype.slice.call(track.children);
+      var dotsWrap = document.getElementById('carousel-dots');
+      var idx = 0, timer = null;
+      slides.forEach(function (_, i) {
+        var b = document.createElement('button');
+        b.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+        b.type = 'button';
+        b.setAttribute('aria-label', 'Ir para imagem ' + (i + 1));
+        b.addEventListener('click', function () { go(i); restart(); });
+        dotsWrap.appendChild(b);
+      });
+      var dots = Array.prototype.slice.call(dotsWrap.children);
+      function go(i) {
+        idx = (i + slides.length) % slides.length;
+        var s = slides[idx];
+        track.scrollTo({ left: s.offsetLeft - (track.clientWidth - s.clientWidth) / 2, behavior: 'smooth' });
+        dots.forEach(function (d, j) { d.classList.toggle('active', j === idx); });
+      }
+      function start() { timer = setInterval(function () { go(idx + 1); }, 4500); }
+      function restart() { clearInterval(timer); start(); }
+      root.querySelector('.prev').addEventListener('click', function () { go(idx - 1); restart(); });
+      root.querySelector('.next').addEventListener('click', function () { go(idx + 1); restart(); });
+      var st = null;
+      track.addEventListener('scroll', function () {
+        clearTimeout(st);
+        st = setTimeout(function () {
+          var center = track.scrollLeft + track.clientWidth / 2, best = 0, bd = Infinity;
+          slides.forEach(function (s, i) {
+            var sc = s.offsetLeft + s.clientWidth / 2, d = Math.abs(sc - center);
+            if (d < bd) { bd = d; best = i; }
+          });
+          idx = best;
+          dots.forEach(function (d, j) { d.classList.toggle('active', j === best); });
+        }, 120);
+      });
+      root.addEventListener('mouseenter', function () { clearInterval(timer); });
+      root.addEventListener('mouseleave', start);
+      start();
+    })();
+  </script>
 </body>
 </html>

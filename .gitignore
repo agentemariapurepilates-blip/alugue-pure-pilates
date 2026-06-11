@@ -8,6 +8,7 @@
 *.heic
 0610*.mp4
 videos/_*.mp4
+WhatsApp Image*.jpeg
 
 # Documentos internos
 *.pdf
